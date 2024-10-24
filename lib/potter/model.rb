@@ -1,5 +1,8 @@
 module Potter
-  class Resource
+  class Model
+    include ActiveModel::Model
+    include ActiveModel::Attributes
+
     class << self
       attr_reader :fields
 
