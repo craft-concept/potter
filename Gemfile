@@ -6,7 +6,8 @@ source "https://rubygems.org"
 gemspec
 
 gem "rake"
-gem "rspec"
+gem "minitest"
 gem "rubocop"
 gem "sinatra"
+gem "rack-test"
 gem "cnc", path: "../cnc"

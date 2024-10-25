@@ -5,10 +5,10 @@ module Potter
     end
 
     module ClassMethods
-      def next_id = @last_id ? @last_id += 1 : @last_id = 0
+      def next_id  = @prev_id ? @prev_id + 1 : 0
 
       def const(name, id = next_id, description: nil)
-        @last_id = id
+        @prev_id = id
         const_set(name, id)
       end
 
@@ -24,7 +24,8 @@ module Potter
 
     def self.of(type)
       parent = self
-      name = type.name.gsub("::", "")
+      name   = type.name.gsub("::", "")
+
       const_get(name) ||
         const_set(type.name.gsub("::", ""), Class.new(type) do
           include parent

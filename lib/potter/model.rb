@@ -1,3 +1,5 @@
+require "active_model"
+
 module Potter
   class Model
     include ActiveModel::Model

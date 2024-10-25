@@ -5,7 +5,7 @@ module Potter
     include Enum
 
     module ClassMethods
-      def next_id = @last_id ? @last_id <<= 1 : @last_id = 1
+      def next_id = @prev_id ? @prev_id << 1 : 1
     end
   end
 
