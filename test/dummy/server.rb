@@ -1,5 +1,7 @@
-require "sinatra"
+require "sinatra/base"
 
-get "/posts" do
-  "Hello world!"
+class DummyServer < Sinatra::Base
+  get "/posts" do
+    "Hello world!"
+  end
 end

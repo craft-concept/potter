@@ -22,14 +22,15 @@ module Potter
       end
     end
 
+    @enums = {}
     def self.of(type)
       parent = self
-      name   = type.name.gsub("::", "")
 
-      const_get(name) ||
-        const_set(type.name.gsub("::", ""), Class.new(type) do
+      @enums[type] ||=
+         Class.new(type) do
+          puts "name: #{type.name}"
           include parent
-        end)
+        end
     end
   end
 
