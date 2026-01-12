@@ -1,10 +1,8 @@
 module Potter
-  module Enum
-    def self.included(base)
-      base.extend ClassMethods
-    end
+  concern :Enum do
+    include Transformers
 
-    module ClassMethods
+    class_methods do
       def next_id  = @prev_id ? @prev_id + 1 : 0
 
       def const(name, id = next_id, description: nil)
@@ -22,17 +20,14 @@ module Potter
       end
     end
 
-    @enums = {}
-    def self.of(type)
-      parent = self
-
-      @enums[type] ||=
-         Class.new(type) do
-          puts "name: #{type.name}"
+    def self.of(type, &)
+      const_cache(type) do
+        parent = self
+        Class.new(type) do
           include parent
+          class_exec(&) if block_given?
         end
+      end
     end
   end
-
-  def self.Enum(type) = Enum.of(type)
 end

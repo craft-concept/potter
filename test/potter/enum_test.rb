@@ -5,8 +5,8 @@ require "potter/enum"
 
 class Potter::EnumTest < Minitest::Test
   class MyInteger < Potter.Enum(Integer)
-    # const :ONE
-    # const :TWO
+    const :ONE
+    const :TWO
   end
 
   def test_enum_creation

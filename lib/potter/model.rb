@@ -1,20 +1,22 @@
 require "active_model"
+require "potter/collections"
+require "potter/csv"
+require "potter/fields"
+require "potter/transformers"
 
 module Potter
-  class Model
-    include ActiveModel::Model
-    include ActiveModel::Attributes
+  module Model
+    extend ActiveSupport::Concern
 
-    class << self
-      attr_reader :fields
+    include Fields
+    include Collections
+    include Transformers
+    include CSV
 
-      def field(name, type, description: nil)
-        @fields ||= []
-        @fields << Field.new(name:, type:, description:)
+    included do
+      from Array do |values|
+        assign values.zip(fields.keys).to_h(&:reverse)
       end
-    end
-
-    class Field < Struct.new(:name, :type, :description, keyword_init: true)
     end
   end
 end
