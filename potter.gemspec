@@ -33,6 +33,8 @@ Gem::Specification.new do |spec|
   spec.executables = spec.files.grep(%r{\Aexe/}) {|f| File.basename(f) }
 
   spec.add_dependency "activemodel"
+  spec.add_dependency "activerecord"
+  spec.add_dependency "rails"
   spec.add_dependency "csv"
   spec.add_dependency "cnc"
   spec.add_dependency "zeitwerk"

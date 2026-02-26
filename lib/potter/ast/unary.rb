@@ -1,5 +1,3 @@
-require_relative "node"
-
 module Potter
   module AST
     class Unary < Node

@@ -6,7 +6,7 @@ module Potter
 
     include ActiveModel::Attributes
 
-    Type = ActiveModel::Type
+    Type = ActiveRecord::Type
     module Type
       class Symbol < ImmutableString
         def type

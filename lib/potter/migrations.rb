@@ -2,15 +2,12 @@ module Potter
   module Migrations
     extend ActiveSupport::Concern
 
-    require "active_record"
-
     class Migration < ActiveRecord::Migration[8.0]
       def initialize(model)
         @model = model
       end
 
       def column_names
-
       end
 
       def create_or_change_table(name, **, &)

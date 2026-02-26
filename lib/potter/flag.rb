@@ -1,5 +1,3 @@
-require_relative "enum"
-
 module Potter
   module Flag
     include Enum

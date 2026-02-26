@@ -1,10 +1,3 @@
-require "potter/ast/binary"
-require "potter/ast/dsl"
-require "potter/ast/proxy"
-require "potter/ast/unary"
-require "potter/ast/value"
-require "potter/ast/variable"
-
 module Potter
   module AST
     module_function

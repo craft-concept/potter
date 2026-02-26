@@ -1,3 +1,5 @@
+require "test_helper"
+
 module Potter
   module AST
     class ProxyTest < Minitest::Test

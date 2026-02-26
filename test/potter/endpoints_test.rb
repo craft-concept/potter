@@ -1,4 +1,4 @@
-require "potter/endpoints"
+require "test_helper"
 require "dummy/endpoints"
 
 class Potter::EndpointsTest < Minitest::Test

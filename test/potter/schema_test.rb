@@ -1,7 +1,9 @@
+require "test_helper"
+
 module Potter
   class SchemaTest < Minitest::Test
     class Animal
-      include Potter::Schema
+      include Schema
 
       integer :legs
     end

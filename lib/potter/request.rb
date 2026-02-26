@@ -6,13 +6,15 @@ module Potter
 
     string :type
     string :state, enum: %w[received queued sending responded failed], default: "sending"
-    string :http_method, enum: %w[get post put patch head  options trace connect], default: "get"
+    string :http_method, default: "get"
     string :root, validates: {presence: true}
     string :path,    default: ""
     json   :params,  default: {}
     json   :headers, default: {}, normalizes: {keys: :parameterize}
 
     belongs_to :response, optional: true
+
+    enum :http_method, %w[get post put patch head delete options trace connect].to_h { [_1, _1] }, prefix: :http
 
     index %i[type path params http_method]
 
@@ -22,7 +24,6 @@ module Potter
     scope :put,   -> { http_put }
     scope :head,  -> { http_head }
 
-    scope :root, ->(root) { where(root:) }
     scope :body, ->(body) { where(body:) }
 
     joined_scope :path, "/", ->(path)    { where(path:) }

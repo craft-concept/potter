@@ -1,6 +1,3 @@
-require_relative "node"
-require_relative "proxy"
-
 module Potter
   module AST
     class Binary < Node

@@ -1,8 +1,9 @@
 module Potter
-  if defined?(ApplicationRecord)
+  if defined?(::ApplicationRecord)
     ApplicationRecord = ::ApplicationRecord
   else
-    class ApplicationRecord < Base
+    require "active_record"
+    class ApplicationRecord < ActiveRecord::Base
       primary_abstract_class
     end
   end

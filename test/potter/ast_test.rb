@@ -1,3 +1,5 @@
+require "test_helper"
+
 module Potter
   class ASTTest < Minitest::Test
     def test_ast_basics
