@@ -32,6 +32,25 @@ module Potter
 
     after_commit :perform, if: :sending?
 
+    def self.response! = sending.create!.response
+
+    def self.root(root)
+      default_scope -> { create_with(root:) }
+    end
+
+    def self.header(headers)
+      default_scope -> { create_with(headers:) }
+    end
+
+    def self.param(params)
+      default_scope -> { create_with(params:) }
+    end
+
+    def self.inherited(subclass)
+      super
+      subclass.belongs_to :response, optional: true
+    end
+
     def header(name) = self[:headers][name.to_s.downcase.gsub(/_/, "-")]
 
     def query = URI.encode_www_form(params)
@@ -51,25 +70,6 @@ module Potter
       Net::HTTP.new(uri.hostname, uri.port).tap do |http|
         http.use_ssl = uri.is_a?(URI::HTTPS)
       end
-    end
-
-    def self.response! = sending.create!.response
-
-    def self.root(root)
-      default_scope -> { create_with(root:) }
-    end
-
-    def self.header(headers)
-      default_scope -> { create_with(headers:) }
-    end
-
-    def self.param(params)
-      default_scope -> { create_with(params:) }
-    end
-
-    def self.inherited(subclass)
-      super
-      subclass.belongs_to :response, optional: true
     end
 
     private

@@ -7,9 +7,8 @@ class Potter::EnumTest < Minitest::Test
   end
 
   def test_enum_creation
-    assert MyInteger
-    assert MyInteger < Integer
-    assert MyInteger < Potter::Enum
-    assert MyInteger::ONE.is_a?(Integer)
+    assert_operator MyInteger, :<, Integer
+    assert_operator MyInteger, :<, Potter::Enum
+    assert_kind_of Integer, MyInteger::ONE
   end
 end

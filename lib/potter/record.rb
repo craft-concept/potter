@@ -36,7 +36,7 @@ module Potter
 
       def joined_scope(name, sep, block)
         scope name, ->(*value) {
-          [ *where_values_hash[name.to_s], *value ]
+          [*where_values_hash[name.to_s], *value]
             .join(sep)
             .then { instance_exec(_1, &block) }
         }

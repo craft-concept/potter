@@ -10,7 +10,6 @@ module Potter
     end
 
     def from(o)
-
     end
   end
 end

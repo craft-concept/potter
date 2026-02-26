@@ -23,13 +23,13 @@ module Potter
         klass = self
 
         if name
-          Node.define_method(name)  { |*args| Proxy klass.new(self, *args.map { Node _1 }) }
-          DSL.define_singleton_method(name)   { |*args| klass.new(*args.map { Node _1 }) }
-          Proxy.define_method(name) { |*args| Proxy klass.new(@node, *args.map { Node _1 }) }
+          Node.define_method(name)  {|*args| Proxy klass.new(self, *args.map { Node _1 }) }
+          DSL.define_singleton_method(name)   {|*args| klass.new(*args.map { Node _1 }) }
+          Proxy.define_method(name) {|*args| Proxy klass.new(@node, *args.map { Node _1 }) }
         end
 
         if symbol
-          Proxy.define_method(symbol) { |*args| Proxy klass.new(@node, *args.map { Node _1 }) }
+          Proxy.define_method(symbol) {|*args| Proxy klass.new(@node, *args.map { Node _1 }) }
         end
       end
     end
