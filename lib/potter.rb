@@ -3,6 +3,7 @@
 require "zeitwerk"
 require "active_support"
 require "active_support/core_ext"
+require "cnc/core_ext"
 require "potter/core_ext"
 
 if defined? ::Rails

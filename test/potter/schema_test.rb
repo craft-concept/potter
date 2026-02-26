@@ -1,9 +1,9 @@
 module Potter
-  class FieldsTest < Minitest::Test
+  class SchemaTest < Minitest::Test
     class Animal
-      include Potter::Fields
+      include Potter::Schema
 
-      field Types::Integer, :legs
+      integer :legs
     end
 
     class Person < Animal

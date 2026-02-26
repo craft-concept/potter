@@ -1,8 +1,12 @@
+require "active_model"
+
 module Potter
   module Schema
     extend ActiveSupport::Concern
 
-    Type = ActiveRecord::Type
+    include ActiveModel::Attributes
+
+    Type = ActiveModel::Type
     module Type
       class Symbol < ImmutableString
         def type
@@ -59,10 +63,16 @@ module Potter
         f.record!(self)
       end
 
+      def default(**keys)
+        keys.each do |key, default|
+          fields[key].default = default
+          fields[key].record!(self)
+        end
+      end
+
       def index(*indexes, unique: false)
         self.indexes |= indexes.map { {fields: [*_1], unique:} }
       end
     end
-
   end
 end

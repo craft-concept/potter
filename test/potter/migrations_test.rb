@@ -7,15 +7,13 @@ module Potter
     )
 
     class Article
-      include Fields, Migrations
+      include Schema, Migrations
 
       string :title
     end
 
     def test_migration
       assert Article.migration
-      assert Article.migration
-      binding.irb
     end
   end
 end

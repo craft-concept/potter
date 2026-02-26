@@ -1,14 +1,8 @@
-require "active_model"
-require "potter/collections"
-require "potter/csv"
-require "potter/fields"
-require "potter/transformers"
-
 module Potter
   module Model
     extend ActiveSupport::Concern
 
-    include Fields
+    include Schema
     include Collections
     include Transformers
     include CSV
