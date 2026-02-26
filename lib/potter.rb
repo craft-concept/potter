@@ -5,9 +5,15 @@ require "active_support"
 require "active_support/core_ext"
 require "potter/core_ext"
 
-loader = Zeitwerk::Loader.for_gem
-loader.inflector.inflect("ast" => "AST", "dsl" => "DSL")
-loader.setup
+if defined? ::Rails
+  require "potter/engine"
+else
+  loader = Zeitwerk::Loader.for_gem
+  loader.inflector.inflect("ast" => "AST", "dsl" => "DSL")
+  loader.ignore("#{__dir__}/potter/core_ext.rb")
+  loader.ignore("#{__dir__}/potter/core_ext")
+  loader.setup
+end
 
 module Potter
   class Error < StandardError; end

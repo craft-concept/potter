@@ -1,7 +1,4 @@
-# frozen_string_literal: true
-
 require "test_helper"
-require "potter/enum"
 
 class Potter::EnumTest < Minitest::Test
   class MyInteger < Potter.Enum(Integer)

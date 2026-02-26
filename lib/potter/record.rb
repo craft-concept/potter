@@ -3,6 +3,7 @@ module Potter
     extend ActiveSupport::Concern
 
     include Migrations
+    include Schema
 
     included do
       scope :newest, -> { order(created_at: :desc) }
@@ -16,12 +17,12 @@ module Potter
         Rails.application.credentials.dig(*scope, *keys)
       end
 
-      def normalizes(name, keys: nil, values: nil, with: :itself, **)
+      def normalizes(*, keys: nil, values: nil, with: :itself, **)
         with = with.to_proc
         with >>= -> { _1.compact.stringify_keys.transform_keys(&keys).sort.to_h } if keys
         with >>= -> { _1.transform_values(&values) } if values
 
-        super name, with:, **
+        super(*, with:, **)
       end
 
       def merged_scope(name, block)

@@ -1,5 +1,3 @@
-require "potter/ast"
-
 module Potter
   class ASTTest < Minitest::Test
     def test_ast_basics

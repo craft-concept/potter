@@ -1,25 +1,20 @@
-require "test_helper"
+module Potter
+  class FieldsTest < Minitest::Test
+    class Animal
+      include Potter::Fields
 
-class Potter::FieldsTest < Minitest::Test
-  class Animal
-    include Potter::Fields
+      field Types::Integer, :legs
+    end
 
-    class Legs < Field(Integer); end
-  end
+    class Person < Animal
+      default legs: 2
 
-  class Person < Animal
-    default legs: 2
+      string :name
+    end
 
-    string :name
-  end
-
-  def test_field_class
-    assert Animal::Legs
-    assert Person::Name
-  end
-
-  def test_fields_reader
-    assert_equal({legs: Animal::Legs}, Animal.fields)
-    assert_equal({legs: Animal::Legs, name: Person::Name}, Person.fields)
+    def test_fields_hash
+      assert Animal.fields[:legs]
+      assert Person.fields[:name]
+    end
   end
 end

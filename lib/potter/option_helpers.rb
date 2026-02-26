@@ -3,37 +3,37 @@ module Potter
     extend ActiveSupport::Concern
 
     included do
-      class_attribute :option_defaults, default: {}
+      class_attribute :options, default: {}, instance_accessor: false, instance_predicate: false
     end
 
-    def assign_options!
-      raise "@options is not a hash" unless @options
-      option_defaults.each { assign_option!(_1, _2) }
+    def assign_options!(**)
+      @options ||= {**}
+      self.class.options.each { assign_option!(_1, **_2) }
     end
 
-    def assign_option!(k, default)
-      value = @options.delete(k) { default.respond_to?(:call) ? default.call : default.clone }
-      instance_variable_set("@#{k}", value)
+    def assign_option!(k, default:, block:)
+      value = @options.delete(k) { default.respond_to?(:call) ? instance_exec(&default) : default.clone }
+      instance_variable_set("@#{k}", block.(value))
     end
 
     class_methods do
-      def inherited(subclass)
-        super
-        subclass.option_defaults = option_defaults.deep_dup
-      end
-
-      def option(name, default: nil, accessor: true, reader: accessor, writer: accessor)
+      def option(name, proc = -> { _1 }, default: nil, accessor: true, reader: accessor, writer: accessor, predicate: reader, &block)
+        block  ||= proc
         reader &&= !name.end_with?(??)
-        name = name.to_s.chomp(??).to_sym
+        name     = name.to_s.chomp(??).to_sym
+
         attr_reader name if reader
         attr_writer name if writer
-        option_defaults[name] = default
-        define_method("#{name}?") { instance_variable_get("@#{name}").present? }
+        define_method("#{name}?") { instance_variable_get("@#{name}").present? } if predicate
+
+        option = {default:, block:}
+        self.options = options.merge(name => option)
       end
 
-      def option_accessor(name)
+      def option_accessor(name, proc = -> { _1 }, &block)
+        block ||= proc
         define_method(name) { @options[name] }
-        define_method("#{name}=") { @options[name] = _1 }
+        define_method("#{name}=") { @options[name] = block.call(_1) }
       end
     end
   end

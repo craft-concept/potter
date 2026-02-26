@@ -1,11 +1,4 @@
 class CreateRequests < ActiveRecord::Migration[8.0]
-  class ::ActiveRecord::ConnectionAdapters::SQLite3::TableDefinition
-    def json(name)
-      text name
-      check_constraint %{json_valid(#{name}, 6)}, name: "#{name}_valid_json"
-    end
-  end
-
   def adapter
     @adapter ||= ActiveRecord::Base.connection.adapter_name.downcase.then { ActiveSupport::StringInquirer.new _1 }
   end
@@ -23,7 +16,7 @@ class CreateRequests < ActiveRecord::Migration[8.0]
       t.string  :type, null: false
       t.integer :status, null: false
 
-      t.json :headers
+      t.jsonb :headers
       t.text :body
 
       t.timestamps
@@ -38,8 +31,8 @@ class CreateRequests < ActiveRecord::Migration[8.0]
       t.string :root, null: false, index: true
       t.string :path, null: false, index: true
 
-      t.json :params
-      t.json :headers
+      t.jsonb :params
+      t.jsonb :headers
       t.text :body
 
       t.references :response, foreign_key: true

@@ -6,20 +6,18 @@ module Potter
       attr_reader :child
 
       def initialize(child)
-        super
+        super()
         @child = child
       end
 
-      def walk
-        yield @child
-      end
+      def eval = public_send(symbol)
     end
 
-    def self.Unary(symbol, name)
-      Node(Unary, symbol:, name:)
+    def self.define_unary(const, symbol)
+      define_node(const, Unary, symbol:)
     end
 
-    Not    = Unary(:!@, :not)
-    Negate = Unary(:-@, :negate)
+    define_unary :Not, :!@
+    define_unary :Negate, :-@
   end
 end

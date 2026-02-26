@@ -34,5 +34,6 @@ Gem::Specification.new do |spec|
 
   spec.add_dependency "activemodel"
   spec.add_dependency "csv"
+  spec.add_dependency "cnc"
   spec.add_dependency "zeitwerk"
 end

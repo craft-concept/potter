@@ -1,26 +1,34 @@
 module Potter
-  concern :Field do
-    include Transformers
-    # option :description
-    # option :required?
-    # option :index?
+  class Field
+    include OptionHelpers
 
-    # def optional? = !required?
+    option :name, &:to_sym
+    option :type, -> { _1.is_a?(Class) ? _1.new : _1 }
+    option :default
 
-    def migrate(t)
-      t.public_send to_sym, name, null: optional?, index: index?
+    option :enum
+    option :validates
+    option :normalizes
+
+    option :persist?, default: true
+    option :required?, default: -> { default.nil? }
+    option :declared?
+    option :description
+
+    def initialize(**)
+      assign_options!(**)
     end
 
-    def self.of(type, &)
-      const_cache(type) do
-        parent = self
-        Class.new(type) do
-          include parent
-          class_exec(&) if block_given?
-        end
-      end
+    def optional? = !required?
+
+    def string? = type.type == :string
+
+    def record!(klass)
+      klass.attribute(name, type, default:)
+      klass.normalizes(name, **normalizes) if normalizes?
+      klass.validates(name, **validates) if validates?
+      klass.enum(name, enum) if enum?
+      self
     end
   end
-
-  Field.of(::String)
 end

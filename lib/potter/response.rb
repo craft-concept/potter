@@ -1,6 +1,6 @@
 module Potter
-  class Response < ActiveRecord::Base
-    include Record
+  class Response < ApplicationRecord
+    include Record, Caching
 
     attribute :headers, ActiveRecord::Type::Json.new, default: -> { {} }
 

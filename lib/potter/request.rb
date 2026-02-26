@@ -1,28 +1,20 @@
 require "net/http"
 
 module Potter
-  class Request < ActiveRecord::Base
-    include Record
+  class Request < ApplicationRecord
+    include Record, Caching
 
-    # class Method < Enum(String)
-    #   const :GET, :POST, :PUT, :PATCH, :HEAD, :DELETE, :OPTIONS, :TRACE, :CONNECT
-    # end
-
-
-    enum :state, %w[received queued sending responded failed].to_h { [ _1, _1 ] }, default: "sending"
-    enum :http_method, %w[get post put patch head delete options trace connect].to_h { [ _1, _1 ] }, prefix: :http, default: "get"
-
-    attribute :path, default: ""
-    attribute :params,  ActiveRecord::Type::Json.new, default: {}
-    attribute :headers, ActiveRecord::Type::Json.new, default: {}
-
-    normalizes :headers, keys: :parameterize
+    string :type
+    string :state, enum: %w[received queued sending responded failed], default: "sending"
+    string :http_method, enum: %w[get post put patch head  options trace connect], default: "get"
+    string :root, validates: {presence: true}
+    string :path,    default: ""
+    json   :params,  default: {}
+    json   :headers, default: {}, normalizes: {keys: :parameterize}
 
     belongs_to :response, optional: true
 
-    validates :root,        presence: true
-    validates :state,       presence: true
-    validates :http_method, presence: true
+    index %i[type path params http_method]
 
     scope :get,   -> { http_get }
     scope :post,  -> { http_post }
@@ -48,18 +40,16 @@ module Potter
     def body_for_request = body_for_database
     def request_class = Net::HTTP.const_get(http_method.capitalize)
 
-    def request
-      @request ||=
-        request_class.new(uri, headers).tap do |req|
-          req.body = body_for_request if req.request_body_permitted?
-        end
+    derive :request do
+      request_class.new(uri, headers).tap do |req|
+        req.body = body_for_request if req.request_body_permitted?
+      end
     end
 
-    def http
-      @http ||=
-        Net::HTTP.new(uri.hostname, uri.port).tap do |http|
-          http.use_ssl = uri.is_a?(URI::HTTPS)
-        end
+    derive :http do
+      Net::HTTP.new(uri.hostname, uri.port).tap do |http|
+        http.use_ssl = uri.is_a?(URI::HTTPS)
+      end
     end
 
     def self.response! = sending.create!.response
