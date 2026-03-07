@@ -6,27 +6,6 @@ module Potter
 
     include ActiveModel::Attributes
 
-    Type = ActiveRecord::Type
-    module Type
-      class Symbol < ImmutableString
-        def type
-          :symbol
-        end
-
-        private
-
-        def cast_value(value)
-          case value
-          when true then @true
-          when false then @false
-          else value.to_sym
-          end
-        end
-      end
-
-      register(:symbol, Symbol)
-    end
-
     included do
       class_attribute :fields, default: {}
       class_attribute :indexes, default: []
@@ -44,6 +23,7 @@ module Potter
       def float(...)    = field(Type::Float, ...)
       def integer(...)  = field(Type::Integer, ...)
       def json(...)     = field(Type::Json, ...)
+      def password(...) = field(Type::Password, ...)
       def symbol(...)   = field(Type::Symbol, ...)
       def string(...)   = field(Type::String, ...)
       def text(...)     = field(Type::Text, ...)
